@@ -42,15 +42,9 @@ params:
         text: 'Design: '
         url: https://www.html5up.net
     social:
-      - icon: fa-twitter
-        label: Twitter
-        url: https://www.twitter.com
-      - icon: fa-facebook
-        label: Facebook
-        url: https://www.facebook.com
       - icon: fa-instagram
         label: Instagram
-        url: https://www.instagram.com
+        url: https://www.instagram.com/londonbschool/?hl=en
       - icon: fa-github
         label: GitHub
         url: https://github.com/Peng9899
@@ -97,7 +91,7 @@ params:
         subtitle: INSIGHT FROM MY WORK
         title: First meet with Data
         url: blogs/ipsum
-      - image: pic05.HEIC
+      - image: pic05.jpg
         subtitle: Happy to share with you
         title: Our Campus
         url: blogs/ipsum
