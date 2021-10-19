@@ -82,8 +82,8 @@ params:
     enable: yes
     showcase:
       - image: pic01.jpg
-        subtitle: Something about me
-        title: MYSTORY
+        subtitle: SOMETHING ABOUT ME
+        title: My Story
         url: blogs/aliquam
       - image: pic02.jpg
         subtitle: My Resume
