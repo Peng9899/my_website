@@ -7,21 +7,21 @@ disqusShortname: ''
 params:
   banner:
     buttonText: Get Started
-    subtitle: |-
+    #subtitle: |-
       A RESPONSIVE SITE TEMPLATE DESIGNED BY HTML5 UP
       AND RELEASED UNDER THE CREATIVE COMMONS.
-    title: Hi, my name is Peng Chen
+    title: Hi, my name is Peng Chen, 陈鹏 in Chinese! :)
   blog: {}
   contact:
     address:
-      - city: City, ST 00000
-        country: Country
-        street: Street
+      - city: London, NW8 7JN
+        country: United Kingdom
+        street: Morone House
         title: Address
     buttonClear: Clear
     buttonSend: Send message
     email:
-      - email: example@domain.com
+      - email: pchen.mfa2022@london.edu
         title: Email
     enable: yes
     phone:
@@ -42,21 +42,21 @@ params:
         text: 'Design: '
         url: https://www.html5up.net
     social:
-      - icon: fa-twitter
-        label: Twitter
-        url: https://www.twitter.com
-      - icon: fa-facebook
-        label: Facebook
+      - #icon: fa-twitter
+        #label: Twitter
+        #url: https://www.twitter.com
+      - #icon: fa-facebook
+        #label: Facebook
         url: https://www.facebook.com
       - icon: fa-instagram
         label: Instagram
         url: https://www.instagram.com
       - icon: fa-github
         label: GitHub
-        url: https://www.github.com
-      - icon: fa-linkedin
-        label: LinkedIn
-        url: https://www.linkedin.com
+        url: https://github.com/Peng9899
+      - #icon: fa-linkedin
+        #label: LinkedIn
+        #url: https://www.linkedin.com/in/peng-chen-b83187162/
   image: ''
   name: Your name
   navigation:
@@ -68,13 +68,13 @@ params:
         url: '#'
     links:
       - name: Home
-        url: '#'
+        url: 'https://peng-chen-website.netlify.app/'
       - name: Blogs
         url: blogs
-      - name: Generic Blog
-        url: blogs/ipsum
-      - name: Elements
-        url: elements.html
+      - #name: Generic Blog
+        #url: blogs/ipsum
+      - #name: Elements
+        #url: elements.html
     menu: Menu
     subtitle: By HTML5 Up
     title: Forty
@@ -82,29 +82,29 @@ params:
     enable: yes
     showcase:
       - image: pic01.jpg
-        subtitle: Ipsum Dolor Sit Amet
-        title: Aliquam
+        subtitle: Something about me
+        title: MYSTORY
         url: blogs/aliquam
       - image: pic02.jpg
-        subtitle: Feugiat Amet Tempus
-        title: Tempus
+        subtitle: My Resume
+        title: Academic and Professional
         url: blogs/tempus
       - image: pic03.jpg
-        subtitle: Lorem Etiam Nullam
-        title: Magna
+        subtitle: INSIGHT FROM GROUP ASSIGNMENT
+        title: Data Analytics in Finance Experience
         url: blogs/magna
       - image: pic04.jpg
-        subtitle: Nisl Sed Aliquam
-        title: Ipsum
+        subtitle: INSIGHT FROM MY WORK
+        title: FIRST MEET WITH DATA
         url: blogs/ipsum
       - image: pic05.jpg
-        subtitle: Ipsum Dolor Sit Amet
-        title: Consequat
+        subtitle: Happy to share with you
+        title: Our Campus
         url: blogs/ipsum
       - image: pic06.jpg
-        subtitle: Feugiat Amet Tempus
-        title: Etiam
-        url: blogs/ipsum
+        subtitle: FEEL FREE TO CONTACT ME
+        title: My Linkedin
+        url: https://www.linkedin.com/in/peng-chen-b83187162/
   two:
     buttonText: Get Started
     enable: yes
