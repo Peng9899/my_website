@@ -25,10 +25,14 @@ I am a typical **Finance** person due to my continuous interest in Finance and r
 I'm from Hebei Province, China. If you want, you can find my hometown here. You can find my hometown in the following World Map~~
 
 
+```{r}
 library (leaflet)
+```
 
+```{r}
 leaflet() %>%
   addMarkers(lng = 119.591553, lat = 39.93005, popup = "MY BEST HOMETOWN")%>%
   addTiles()
-
+```
+  
   
