@@ -85,23 +85,23 @@ params:
         subtitle: SOMETHING ABOUT ME
         title: My Story
         url: blogs/aliquam
-      - image: pic02.jpg
+      - image: pic02.JPG
         subtitle: My Resume
         title: Academic and Professional
         url: blogs/tempus
-      - image: pic03.jpg
+      - image: pic03.JPG
         subtitle: INSIGHT FROM GROUP ASSIGNMENT
         title: Data Analytics in Finance Experience
         url: blogs/magna
-      - image: pic04.jpg
+      - image: pic04.JPG
         subtitle: INSIGHT FROM MY WORK
-        title: FIRST MEET WITH DATA
+        title: First meet with Data
         url: blogs/ipsum
-      - image: pic05.jpg
+      - image: pic05.HEIC
         subtitle: Happy to share with you
         title: Our Campus
         url: blogs/ipsum
-      - image: pic06.jpg
+      - image: pic06.JPG
         subtitle: FEEL FREE TO CONTACT ME
         title: My Linkedin
         url: https://www.linkedin.com/in/peng-chen-b83187162/
