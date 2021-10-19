@@ -60,12 +60,9 @@ params:
     links:
       - name: Home
         url: 'https://peng-chen-website.netlify.app/'
-      - name: Blogs
-        url: blogs
-      - name: Generic Blog
-        url: blogs/ipsum
-      - name: Elements
-        url: elements.html
+      - name: GITHUB
+        url: https://github.com/Peng9899
+
     menu: Menu
     subtitle: By HTML5 Up
     title: Forty
