@@ -22,7 +22,7 @@ I am a typical **Finance** person due to my continuous interest in Finance and r
 * **Analyst** in *CMS*, *top 5 IBD in CHINA*, and responsible for the dual dilligence for the IPO project.
 * **Analyst** in *Yinhua Fund*, *top 5 Fund in CHINA*, and responsible for the TMT analysis.
 
-I'm from China, Hebei Province you can find my hometown here. You can find my hometown in the following World Map~~
+I'm from Hebei Province, China. If you want, you can find my hometown here. You can find my hometown in the following World Map~~
 
 
 library (leaflet)
