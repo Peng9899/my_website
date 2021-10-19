@@ -27,6 +27,7 @@ I'm from Hebei Province, China. If you want, you can find my hometown here. You 
 
 ```{r}
 library (leaflet)
+library(sf)
 ```
 
 ```{r}
