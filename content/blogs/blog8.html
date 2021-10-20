@@ -1,0 +1,869 @@
+---
+title: "Homework 2"
+date: '2017-10-31T22:42:51-05:00'
+
+output:
+  html_document:
+    df_print: paged
+image: pic07.JPG
+keywords: ''
+slug: blog8
+categories:
+- ''
+- ''
+draft: no
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="climate-change-and-temperature-anomalies" class="section level1">
+<h1>Climate change and temperature anomalies</h1>
+<p>If we wanted to study climate change, we can find data on the <em>Combined Land-Surface Air and Sea-Surface Water Temperature Anomalies</em> in the Northern Hemisphere at <a href="https://data.giss.nasa.gov/gistemp">NASA’s Goddard Institute for Space Studies</a>. The <a href="https://data.giss.nasa.gov/gistemp/tabledata_v4/NH.Ts+dSST.txt">tabular data of temperature anomalies can be found here</a></p>
+<p>To define temperature anomalies you need to have a reference, or base, period which NASA clearly states that it is the period between 1951-1980.</p>
+<p>Run the code below to load the file:</p>
+<pre class="r"><code>weather &lt;- 
+  read_csv(&quot;https://data.giss.nasa.gov/gistemp/tabledata_v4/NH.Ts+dSST.csv&quot;, 
+           skip = 1, 
+           na = &quot;***&quot;)</code></pre>
+<p>Notice that, when using this function, we added two options: <code>skip</code> and <code>na</code>.</p>
+<ol style="list-style-type: decimal">
+<li>The <code>skip=1</code> option is there as the real data table only starts in Row 2, so we need to skip one row.</li>
+<li><code>na = "***"</code> option informs R how missing observations in the spreadsheet are coded. When looking at the spreadsheet, you can see that missing data is coded as "***". It is best to specify this here, as otherwise some of the data is not recognized as numeric data.</li>
+</ol>
+<p>Once the data is loaded, notice that there is a object titled <code>weather</code> in the <code>Environment</code> panel. If you cannot see the panel (usually on the top-right), go to <code>Tools</code> &gt; <code>Global Options</code> &gt; <code>Pane Layout</code> and tick the checkbox next to <code>Environment</code>. Click on the <code>weather</code> object, and the dataframe will pop up on a seperate tab. Inspect the dataframe.</p>
+<p>For each month and year, the dataframe shows the deviation of temperature from the normal (expected). Further the dataframe is in wide format.</p>
+<p>You have two objectives in this section:</p>
+<ol style="list-style-type: decimal">
+<li><p>Select the year and the twelve month variables from the <code>weather</code> dataset. We do not need the others (J-D, D-N, DJF, etc.) for this assignment. Hint: use <code>select()</code> function.</p></li>
+<li><p>Convert the dataframe from wide to ‘long’ format. Hint: use <code>gather()</code> or <code>pivot_longer()</code> function. Name the new dataframe as <code>tidyweather</code>, name the variable containing the name of the month as <code>month</code>, and the temperature deviation values as <code>delta</code>.</p></li>
+</ol>
+<pre class="r"><code># Step 1 Select the column that we want
+tidyweather &lt;- select (weather, Year, Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec )
+# Step 2: Turn data into long format using pivot_longer()
+
+tidyweather &lt;- tidyweather %&gt;% 
+  pivot_longer(cols = 2:13, 
+               names_to= &quot;Month&quot;,
+               values_to=&quot;delta&quot; )
+skim (tidyweather)</code></pre>
+<table>
+<caption><span id="tab:tidyweather">Table 1: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">tidyweather</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">1704</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">3</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">2</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Month</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">12</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Year</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1950.50</td>
+<td align="right">41.00</td>
+<td align="right">1880.00</td>
+<td align="right">1915.00</td>
+<td align="right">1950</td>
+<td align="right">1986.00</td>
+<td align="right">2021.00</td>
+<td align="left">▇▇▇▇▇</td>
+</tr>
+<tr class="even">
+<td align="left">delta</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">0.08</td>
+<td align="right">0.47</td>
+<td align="right">-1.52</td>
+<td align="right">-0.24</td>
+<td align="right">0</td>
+<td align="right">0.31</td>
+<td align="right">1.94</td>
+<td align="left">▁▆▇▂▁</td>
+</tr>
+</tbody>
+</table>
+<p>Inspect your dataframe. It should have three variables now, one each for</p>
+<ol style="list-style-type: decimal">
+<li>year,</li>
+<li>month, and</li>
+<li>delta, or temperature deviation.</li>
+</ol>
+<div id="plotting-information" class="section level2">
+<h2>Plotting Information</h2>
+<p>Let us plot the data using a time-series scatter plot, and add a trendline. To do that, we first need to create a new variable called <code>date</code> in order to ensure that the <code>delta</code> values are plot chronologically.</p>
+<pre class="r"><code>tidyweather &lt;- tidyweather %&gt;%
+  mutate(date = ymd(paste(as.character(Year), Month, &quot;1&quot;)),
+         month = month(date, label=TRUE),
+         year = year(date))
+
+ggplot(tidyweather, aes(x=date, y = delta))+
+  geom_point()+
+  geom_smooth(color=&quot;red&quot;) +
+  theme_bw() +
+  labs (
+    title = &quot;Weather Anomalies&quot;
+  )</code></pre>
+<p><img src="/blogs/blog8_files/figure-html/scatter_plot-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Is the effect of increasing temperature more pronounced in some months? Use <code>facet_wrap()</code> to produce a seperate scatter plot for each month, again with a smoothing line. Your chart should human-readable labels; that is, each month should be labeled “Jan”, “Feb”, “Mar” (full or abbreviated month names are fine), not <code>1</code>, <code>2</code>, <code>3</code>.</p>
+<pre class="r"><code>tidyweather &lt;- tidyweather %&gt;%
+  mutate(date = ymd(paste(as.character(Year), Month, &quot;1&quot;)),
+         month = month(date, label=TRUE),
+         year = year(date))
+
+ggplot(tidyweather, aes(x=date, y = delta))+
+  geom_point()+
+  geom_smooth(color=&quot;red&quot;) +
+  facet_wrap(~month,scales=&quot;free&quot;, nrow=4)+
+  theme_bw() +
+  labs (
+    title = &quot;Weather Anomalies by Months&quot;
+  )</code></pre>
+<p><img src="/blogs/blog8_files/figure-html/facet_wrap-1.png" width="648" style="display: block; margin: auto;" />
+<img src="/blogs/blog8_files/figure-html/variability%20of%20data-1.png" width="648" style="display: block; margin: auto;" /></p>
+<blockquote>
+<p>Team Comment : It is very interesting to see how temperatures are much more volatile in the winter than in the summer. Indeed, this is due to the general increase in temperatures which is very marked in the winter as this is the period with the lowest temperatures (whereas in the summer, there are already very high temperatures). That is why we wanted to measure the standard deviation, to show that temperatures increased a lot especially in the winter. For example, despite current surging gas prices in the European market, analysts are skeptical that the trend will continue as the increase in temperatures in the winter exerts downward pressure on the global gas demand. According to the financial times, “it would take a longer and colder winter than last year to see market pricing sustained above current levels”
+(<a href="https://www.ft.com/content/f2ca6690-0390-4374-a9d5-29caf2d651dd" class="uri">https://www.ft.com/content/f2ca6690-0390-4374-a9d5-29caf2d651dd</a>). This is a perpetual topic among the energy analysts - how higher temperature in the winter makes it harder to decrease global gas inventories.</p>
+</blockquote>
+<p>It is sometimes useful to group data into different time periods to study historical data. For example, we often refer to decades such as 1970s, 1980s, 1990s etc. to refer to a period of time. NASA calcuialtes a temperature anomaly, as difference form the base period of 1951-1980. The code below creates a new data frame called <code>comparison</code> that groups data in five time periods: 1881-1920, 1921-1950, 1951-1980, 1981-2010 and 2011-present.</p>
+<p>We remove data before 1800 and before using <code>filter</code>. Then, we use the <code>mutate</code> function to create a new variable <code>interval</code> which contains information on which period each observation belongs to. We can assign the different periods using <code>case_when()</code>.</p>
+<pre class="r"><code>comparison &lt;- tidyweather %&gt;% 
+  filter(Year&gt;= 1881) %&gt;%     #remove years prior to 1881
+  #create new variable &#39;interval&#39;, and assign values based on criteria below:
+  mutate(interval = case_when(
+    Year %in% c(1881:1920) ~ &quot;1881-1920&quot;,
+    Year %in% c(1921:1950) ~ &quot;1921-1950&quot;,
+    Year %in% c(1951:1980) ~ &quot;1951-1980&quot;,
+    Year %in% c(1981:2010) ~ &quot;1981-2010&quot;,
+    TRUE ~ &quot;2011-present&quot;
+  ))</code></pre>
+<p>Inspect the <code>comparison</code> dataframe by clicking on it in the <code>Environment</code> pane.</p>
+<p>Now that we have the <code>interval</code> variable, we can create a density plot to study the distribution of monthly deviations (<code>delta</code>), grouped by the different time periods we are interested in. Set <code>fill</code> to <code>interval</code> to group and colour the data by different time periods.</p>
+<pre class="r"><code>ggplot(comparison, aes(x=delta, fill=interval))+
+  geom_density(alpha=0.2) +   #density plot with tranparency set to 20%
+  theme_bw() +                #theme
+  labs (
+    title = &quot;Density Plot for Monthly Temperature Anomalies&quot;,
+    y     = &quot;Density&quot;         #changing y-axis label to sentence case
+  )</code></pre>
+<p><img src="/blogs/blog8_files/figure-html/density_plot-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>So far, we have been working with monthly anomalies. However, we might be interested in average annual anomalies. We can do this by using <code>group_by()</code> and <code>summarise()</code>, followed by a scatter plot to display the result.</p>
+<pre class="r"><code>#creating yearly averages
+average_annual_anomaly &lt;- tidyweather %&gt;% 
+  group_by(Year) %&gt;%   #grouping data by Year
+  
+  # creating summaries for mean delta 
+  # use `na.rm=TRUE` to eliminate NA (not available) values 
+  summarise(annual_average_delta=mean(delta)) 
+
+#plotting the data:
+ggplot(average_annual_anomaly, aes(x=Year, y= annual_average_delta))+
+  geom_point()+
+  
+  #Fit the best fit line, using LOESS method
+  geom_smooth() +
+  
+  #change to theme_bw() to have white background + black frame around plot
+  theme_bw() +
+  labs (
+    title = &quot;Average Yearly Anomaly&quot;,
+    y     = &quot;Average Annual Delta&quot;
+  )                         </code></pre>
+<p><img src="/blogs/blog8_files/figure-html/averaging-1.png" width="648" style="display: block; margin: auto;" />
+&gt; Team Comment: Here, we see a clear upward trend of temperatures since 1880. The Paris agreement’s goal is to limit global warming to a level well below 2 degrees, preferably 1.5 degrees Celsius. The speed at which investors will shift to Net Zero carbon emissions will depend on the measures that policymakers make. In the US, we see the Biden administration in favour of the energy transition, but it remains to be seen if it passes some of these changes through Congress. The European Commision announced over the summer that it planned to expand the Emission Trading System to the construction and automotive industries. But in reality, despite political uncertainties, there is appears to be a consensus among investors that the energy transition will be accelerated as no one wants to take the risk of being seen to be holding brown assets. As the result, banks and funds must align with the Net Zero Carbon objectives which will likely in turn exert downward pressure on temperatures in the long run (We hope!).</p>
+</div>
+<div id="confidence-interval-for-delta" class="section level2">
+<h2>Confidence Interval for <code>delta</code></h2>
+<p><a href="https://earthobservatory.nasa.gov/world-of-change/decadaltemp.php">NASA points out on their website</a> that</p>
+<blockquote>
+<p>A one-degrees Celsius of global temperature change is significant because it takes a vast amount of heat to warm all the oceans, atmosphere, and land by that much. In the past, a one- to two-degree drop was all it took to plunge the Earth into the Little Ice Age.</p>
+</blockquote>
+<p>Your task is to construct a confidence interval for the average annual delta since 2011, both using a formula and using a bootstrap simulation with the <code>infer</code> package. Recall that the dataframe <code>comparison</code> has already grouped temperature anomalies according to time intervals; we are only interested in what is happening between 2011-present.
+## ask for others coment on what dataframe we should use</p>
+<pre class="r"><code>formula_ci &lt;- comparison %&gt;% 
+  # choose the interval 2011-present
+  filter(interval==&quot;2011-present&quot;) %&gt;% 
+  # calculate summary statistics for temperature deviation (delta) 
+  # calculate mean, SD, count, SE, lower/upper 95% CI
+  summarise(mean_delta= mean(delta,na.rm=TRUE),
+            sd_delta=sd(delta,na.rm=TRUE),
+            count=n(),
+            # get 95% t critical value
+            t_critical= qt(0.975,count-1), 
+            se_delta= sd_delta/sqrt(count),
+            margin_of_error= t_critical * se_delta,
+            delta_low95= mean_delta-margin_of_error,
+            delta_high95=mean_delta+margin_of_error)
+
+
+
+
+#print out formula_CI
+formula_ci</code></pre>
+<pre><code>## # A tibble: 1 × 8
+##   mean_delta sd_delta count t_critical se_delta margin_of_error delta_low95
+##        &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;           &lt;dbl&gt;       &lt;dbl&gt;
+## 1       1.06    0.274   132       1.98   0.0239          0.0472        1.01
+## # … with 1 more variable: delta_high95 &lt;dbl&gt;</code></pre>
+<pre class="r"><code>library(infer)
+# use the infer package to construct a 95% CI for delta
+#set up the starting point 
+set.seed(1234)
+boot_delta &lt;- comparison %&gt;% 
+# Filter the interval 2011 to present 
+  filter(interval==&quot;2011-present&quot;) %&gt;%
+#Specify the varaible of interest (delta)
+  specify(response = delta) %&gt;% 
+#Generate a bunch of bootstrap sample 
+  generate(reps=1000,type=&quot;bootstrap&quot;) %&gt;% 
+# calculate the mean of each sample
+  calculate (stat=&quot;mean&quot;)
+# get the 95% CI 
+percentile_ci &lt;- boot_delta %&gt;% 
+  get_confidence_interval(level=0.95,type=&quot;percentile&quot;)
+percentile_ci</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   lower_ci upper_ci
+##      &lt;dbl&gt;    &lt;dbl&gt;
+## 1     1.01     1.11</code></pre>
+</div>
+<div id="visualize-the-output-for-analysis" class="section level2">
+<h2>Visualize the output for analysis</h2>
+<pre class="r"><code>delta_ci &lt;- comparison %&gt;% 
+            filter(interval==&quot;2011-present&quot;) %&gt;% 
+            ggplot (aes(x=delta))+
+            geom_histogram()+
+            theme_bw()+
+            labs(title=&quot;Temperature Variation from 2011-present&quot;, x=&quot;Delta (Temperature Change)&quot;,y=&quot;Count&quot;)+
+            geom_vline(xintercept=1.005,linetype=&quot;dashed&quot;,color=&quot;red&quot;)+
+            geom_vline(xintercept=1.11,linetype=&quot;dashed&quot;,color=&quot;red&quot;)+
+            annotate(&quot;text&quot;, x = 1.06,y=16, label = &quot;95% Confidence Interval&quot;, size=4,color=&quot;blue&quot;)+
+            geom_rect(aes(xmin = 1.01, xmax = 1.11, ymin = -Inf, ymax = Inf),fill = &quot;pink&quot;, alpha = 0.03)
+delta_ci</code></pre>
+<p><img src="/blogs/blog8_files/figure-html/unnamed-chunk-1-1.png" width="648" style="display: block; margin: auto;" /></p>
+<blockquote>
+<p>What is the data showing us? Please type your answer after (and outside!) this blockquote. You have to explain what you have done, and the interpretation of the result. One paragraph max, please!</p>
+</blockquote>
+<blockquote>
+<p>From the scatter plot “Weather Anomalies” , we can see the increasing trend in the change in temperature in both annual and monthly average since 1880 to present. Therefore, we plot the “Density Plot for Temperature Anomalies” to see the temperature changes by decades and we find that the biggest temperature changes (delta) mean increase around 1.3 degree in the last two intervals (1980-2010 and 2010-present). Moreover, the scatter “Weather Anomalies by Month” also shows that Jan-March, has the highest temperature variability (High SD), we guess that it is in the winter period; therefore, there is a greater level of fuels such as coal and gas required to create an electricity for lighting and heating purposes. This action creates more Co2 emissions in the period which may lead to more temperature variability and is also likely the cause of winters getting colder and more extreme. We only estimate the true population mean of temperature change anomalies, so we create the 95% confidence interval for the prediction of the change in the mean in the last period (2010-present). From what we found out we are 95% confident that the true delta (temperature change) lies between (1.02, 1.11). In conclusion, if we do not take action to prevent the temperature changes in the next decade it is likely that the temperature change will accelerate with drastic consequences for our climate.</p>
+</blockquote>
+</div>
+</div>
+<div id="global-warming-and-political-views-gss" class="section level1">
+<h1>Global warming and political views (GSS)</h1>
+<p><a href="https://www.pewresearch.org/2010/10/27/wide-partisan-divide-over-global-warming/">A 2010 Pew Research poll</a> asked 1,306 Americans, “From what you’ve read and heard, is there solid evidence that the average temperature on earth has been getting warmer over the past few decades, or not?”</p>
+<p>In this exercise we analyze whether there are any differences between the proportion of people who believe the earth is getting warmer and their political ideology. As usual, from the <strong>survey sample data</strong>, we will use the proportions to estimate values of <em>population parameters</em>. The file has 2253 observations on the following 2 variables:</p>
+<ul>
+<li><code>party_or_ideology</code>: a factor (categorical) variable with levels Conservative Republican, Liberal Democrat, Mod/Cons Democrat, Mod/Lib Republican</li>
+<li><code>response</code> : whether the respondent believes the earth is warming or not, or Don’t know/ refuse to answer</li>
+</ul>
+<pre class="r"><code>global_warming_pew &lt;- read_csv(here::here(&quot;data&quot;, &quot;global_warming_pew.csv&quot;))
+unique(global_warming_pew$response) </code></pre>
+<pre><code>## [1] &quot;Earth is warming&quot;              &quot;Not warming&quot;                  
+## [3] &quot;Don&#39;t know / refuse to answer&quot;</code></pre>
+<p>You will also notice that many responses should not be taken into consideration, like “No Answer”, “Don’t Know”, “Not applicable”, “Refused to Answer”.</p>
+<pre class="r"><code>global_warming_pew %&gt;% 
+  count(party_or_ideology, response)</code></pre>
+<pre><code>## # A tibble: 12 × 3
+##    party_or_ideology       response                          n
+##    &lt;chr&gt;                   &lt;chr&gt;                         &lt;int&gt;
+##  1 Conservative Republican Don&#39;t know / refuse to answer    45
+##  2 Conservative Republican Earth is warming                248
+##  3 Conservative Republican Not warming                     450
+##  4 Liberal Democrat        Don&#39;t know / refuse to answer    23
+##  5 Liberal Democrat        Earth is warming                405
+##  6 Liberal Democrat        Not warming                      23
+##  7 Mod/Cons Democrat       Don&#39;t know / refuse to answer    45
+##  8 Mod/Cons Democrat       Earth is warming                563
+##  9 Mod/Cons Democrat       Not warming                     158
+## 10 Mod/Lib Republican      Don&#39;t know / refuse to answer    23
+## 11 Mod/Lib Republican      Earth is warming                135
+## 12 Mod/Lib Republican      Not warming                     135</code></pre>
+<p>We will be constructing three/four 95% confidence intervals to estimate population parameters, for the % who believe that <strong>Earth is warming</strong>, accoridng to their party or ideology.
+You can create the CIs using the formulas by hand, or use <code>prop.test()</code>– just rememeber to exclude the Dont know / refuse to answer!</p>
+<pre class="r"><code>global_warming &lt;- global_warming_pew %&gt;%
+  filter(response != &quot;Don&#39;t know / refuse to answer&quot;)
+unique(global_warming$response)</code></pre>
+<pre><code>## [1] &quot;Earth is warming&quot; &quot;Not warming&quot;</code></pre>
+<pre class="r"><code>#as Don&#39;t know / refuse to answer response is filtered out, the response becomes binomial
+global_warming</code></pre>
+<pre><code>## # A tibble: 2,117 × 2
+##    party_or_ideology       response        
+##    &lt;chr&gt;                   &lt;chr&gt;           
+##  1 Conservative Republican Earth is warming
+##  2 Conservative Republican Earth is warming
+##  3 Conservative Republican Earth is warming
+##  4 Conservative Republican Earth is warming
+##  5 Conservative Republican Earth is warming
+##  6 Conservative Republican Earth is warming
+##  7 Conservative Republican Earth is warming
+##  8 Conservative Republican Earth is warming
+##  9 Conservative Republican Earth is warming
+## 10 Conservative Republican Earth is warming
+## # … with 2,107 more rows</code></pre>
+<pre class="r"><code>global_warming&lt;- global_warming %&gt;%
+  count(party_or_ideology, response)
+global_warming</code></pre>
+<pre><code>## # A tibble: 8 × 3
+##   party_or_ideology       response             n
+##   &lt;chr&gt;                   &lt;chr&gt;            &lt;int&gt;
+## 1 Conservative Republican Earth is warming   248
+## 2 Conservative Republican Not warming        450
+## 3 Liberal Democrat        Earth is warming   405
+## 4 Liberal Democrat        Not warming         23
+## 5 Mod/Cons Democrat       Earth is warming   563
+## 6 Mod/Cons Democrat       Not warming        158
+## 7 Mod/Lib Republican      Earth is warming   135
+## 8 Mod/Lib Republican      Not warming        135</code></pre>
+<pre class="r"><code>global_warming &lt;- global_warming %&gt;%   #assign probability of each response by each group
+  group_by(party_or_ideology) %&gt;%
+  mutate(total=sum(n),
+           perc = n/sum(n))
+global_warming</code></pre>
+<pre><code>## # A tibble: 8 × 5
+## # Groups:   party_or_ideology [4]
+##   party_or_ideology       response             n total   perc
+##   &lt;chr&gt;                   &lt;chr&gt;            &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
+## 1 Conservative Republican Earth is warming   248   698 0.355 
+## 2 Conservative Republican Not warming        450   698 0.645 
+## 3 Liberal Democrat        Earth is warming   405   428 0.946 
+## 4 Liberal Democrat        Not warming         23   428 0.0537
+## 5 Mod/Cons Democrat       Earth is warming   563   721 0.781 
+## 6 Mod/Cons Democrat       Not warming        158   721 0.219 
+## 7 Mod/Lib Republican      Earth is warming   135   270 0.5   
+## 8 Mod/Lib Republican      Not warming        135   270 0.5</code></pre>
+<pre class="r"><code>test_1&lt;-prop.test(x=248, n=698)
+test_1</code></pre>
+<pre><code>## 
+##  1-sample proportions test with continuity correction
+## 
+## data:  248 out of 698
+## X-squared = 58, df = 1, p-value = 3e-14
+## alternative hypothesis: true p is not equal to 0.5
+## 95 percent confidence interval:
+##  0.320 0.392
+## sample estimates:
+##     p 
+## 0.355</code></pre>
+<pre class="r"><code>test_2&lt;-prop.test(x=405, n=428)
+test_2</code></pre>
+<pre><code>## 
+##  1-sample proportions test with continuity correction
+## 
+## data:  405 out of 428
+## X-squared = 339, df = 1, p-value &lt;2e-16
+## alternative hypothesis: true p is not equal to 0.5
+## 95 percent confidence interval:
+##  0.919 0.965
+## sample estimates:
+##     p 
+## 0.946</code></pre>
+<pre class="r"><code>test_3&lt;-prop.test(x=563, n=721)
+test_3</code></pre>
+<pre><code>## 
+##  1-sample proportions test with continuity correction
+## 
+## data:  563 out of 721
+## X-squared = 226, df = 1, p-value &lt;2e-16
+## alternative hypothesis: true p is not equal to 0.5
+## 95 percent confidence interval:
+##  0.748 0.810
+## sample estimates:
+##     p 
+## 0.781</code></pre>
+<pre class="r"><code>test_4&lt;-prop.test(x=135, n=270)
+test_4</code></pre>
+<pre><code>## 
+##  1-sample proportions test without continuity correction
+## 
+## data:  135 out of 270
+## X-squared = 0, df = 1, p-value = 1
+## alternative hypothesis: true p is not equal to 0.5
+## 95 percent confidence interval:
+##  0.441 0.559
+## sample estimates:
+##   p 
+## 0.5</code></pre>
+<pre class="r"><code>global_warming_table_2&lt;-global_warming_pew %&gt;% 
+filter(response != &quot;Don&#39;t know / refuse to answer&quot;)%&gt;% 
+  count(party_or_ideology, response) %&gt;% 
+  pivot_wider(names_from = response,
+              values_from = n) %&gt;% 
+  mutate(total  = `Earth is warming` + `Not warming`,
+         perc = `Earth is warming` / total,
+         se = sqrt((perc*(1-perc)/total)),
+         lower_95CI = perc - 1.96* se,
+         upper_95CI = perc + 1.96* se)
+
+knitr::kable(global_warming_table_2, caption = &quot;Belief in Global Warming based on Party or Ideology&quot;, col.names = c(&quot;Party or Ideology&quot;, &quot;Earth is warming&quot;, &quot;Not warming&quot;,&quot;Total&quot;,&quot;Percentage&quot;,&quot;Standard Error&quot;, &quot;Lower 95 CI&quot;, &quot;Upper 95 CI&quot;), digit=3)</code></pre>
+<table style="width:100%;">
+<caption>(#tab:Finding 95% CI using writing by hands)Belief in Global Warming based on Party or Ideology</caption>
+<colgroup>
+<col width="22%" />
+<col width="15%" />
+<col width="11%" />
+<col width="5%" />
+<col width="10%" />
+<col width="13%" />
+<col width="11%" />
+<col width="11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Party or Ideology</th>
+<th align="right">Earth is warming</th>
+<th align="right">Not warming</th>
+<th align="right">Total</th>
+<th align="right">Percentage</th>
+<th align="right">Standard Error</th>
+<th align="right">Lower 95 CI</th>
+<th align="right">Upper 95 CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Conservative Republican</td>
+<td align="right">248</td>
+<td align="right">450</td>
+<td align="right">698</td>
+<td align="right">0.355</td>
+<td align="right">0.018</td>
+<td align="right">0.320</td>
+<td align="right">0.391</td>
+</tr>
+<tr class="even">
+<td align="left">Liberal Democrat</td>
+<td align="right">405</td>
+<td align="right">23</td>
+<td align="right">428</td>
+<td align="right">0.946</td>
+<td align="right">0.011</td>
+<td align="right">0.925</td>
+<td align="right">0.968</td>
+</tr>
+<tr class="odd">
+<td align="left">Mod/Cons Democrat</td>
+<td align="right">563</td>
+<td align="right">158</td>
+<td align="right">721</td>
+<td align="right">0.781</td>
+<td align="right">0.015</td>
+<td align="right">0.751</td>
+<td align="right">0.811</td>
+</tr>
+<tr class="even">
+<td align="left">Mod/Lib Republican</td>
+<td align="right">135</td>
+<td align="right">135</td>
+<td align="right">270</td>
+<td align="right">0.500</td>
+<td align="right">0.030</td>
+<td align="right">0.440</td>
+<td align="right">0.560</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#changed it into 3 decimal point</code></pre>
+<p>Does it appear that whether or not a respondent believes the earth is warming is independent of their party ideology?</p>
+<p>You may want to read on <a href="https://www.brookings.edu/research/the-challenging-politics-of-climate-change/">The challenging politics of climate change</a></p>
+<pre class="r"><code>x &lt;- c(248, 405,563,135)
+n &lt;- c(698, 428, 721,270)
+
+pairwise.prop.test(x,n)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using Pairwise comparison of proportions 
+## 
+## data:  x out of n 
+## 
+##   1      2      3     
+## 2 &lt;2e-16 -      -     
+## 3 &lt;2e-16 4e-13  -     
+## 4 5e-05  &lt;2e-16 &lt;2e-16
+## 
+## P value adjustment method: holm</code></pre>
+<p><span class="math inline">\(H_0\)</span> : <span class="math inline">\(P_1\)</span> = <span class="math inline">\(P_2\)</span> = <span class="math inline">\(P_3\)</span> = <span class="math inline">\(P_4\)</span><br />
+Null Hypothesis: observed proportion of people who feel that there is global warming is the same across party ideology</p>
+<p><span class="math inline">\(H_A\)</span> : <span class="math inline">\(P_i\)</span> <span class="math inline">\(!=\)</span> <span class="math inline">\(P_j\)</span> for all i <span class="math inline">\(!=\)</span> j and i,j <span class="math inline">\(&lt;=\)</span> 4<br />
+Alternative Hypothesis: observed proportion of people who feel that there is global warming is dependent of their party ideology</p>
+<p>The p-values are less than 5% signficance level, and are statistically significant. It indicates strong evidence against the null hypothesis, as there is less than a 5% probability the null is correct. Thus, null hypothesis is rejected and alternative hypothesis is not rejected. This shows that proportion of people who believe there are global warmings are significantly different across the party ideology.</p>
+<p>We are 95% confidence that Liberal Democrat has from 0.9248977 to 0.9676256 proportion of people expresses that there is a global warming
+We are 95% confidence that Mod/Cons Democrat has from 0.7506649 to 0.8110550 proportion of people expresses that there is a global warming
+We are 95% confidence that Mod/Lib Republican has from 0.4403591 to 0.5596409 proportion of people expresses that there is a global warming
+We are 95% confidence that Conservative Republican has from 0.3197946 to 0.3908071 proportion of people expresses that there is a global warming</p>
+<blockquote>
+<p>Team Comment : It appears to us that the more conservative a person’s ideology, the less likely the person would believe in global warming. Thus, party ideology is a significant predictor of people’s view on global warming. Indeed, it appears that Conservatives do not want to restrain their current activities in the name of long-term sustainability. On the contrary, democrats like the idea that capital and resources should be restrained with the benefits of future generations in mind. Conservatives do not like to regulate the behavior of people here and now in the name of an idea which goes beyond the individual.</p>
+</blockquote>
+</div>
+<div id="bidens-approval-margins" class="section level1">
+<h1>Biden’s Approval Margins</h1>
+<p>As we saw in class, fivethirtyeight.com has detailed data on <a href="https://projects.fivethirtyeight.com/biden-approval-ratings">all polls that track the president’s approval</a></p>
+<pre class="r"><code># Import approval polls data directly off fivethirtyeight website
+approval_polllist &lt;- read_csv(&#39;https://projects.fivethirtyeight.com/biden-approval-data/approval_polllist.csv&#39;) 
+
+glimpse(approval_polllist)</code></pre>
+<pre><code>## Rows: 1,943
+## Columns: 22
+## $ president           &lt;chr&gt; &quot;Joseph R. Biden Jr.&quot;, &quot;Joseph R. Biden Jr.&quot;, &quot;Jos…
+## $ subgroup            &lt;chr&gt; &quot;All polls&quot;, &quot;All polls&quot;, &quot;All polls&quot;, &quot;All polls&quot;…
+## $ modeldate           &lt;chr&gt; &quot;10/20/2021&quot;, &quot;10/20/2021&quot;, &quot;10/20/2021&quot;, &quot;10/20/2…
+## $ startdate           &lt;chr&gt; &quot;1/19/2021&quot;, &quot;1/19/2021&quot;, &quot;1/20/2021&quot;, &quot;1/20/2021&quot;…
+## $ enddate             &lt;chr&gt; &quot;1/21/2021&quot;, &quot;1/21/2021&quot;, &quot;1/21/2021&quot;, &quot;1/21/2021&quot;…
+## $ pollster            &lt;chr&gt; &quot;Rasmussen Reports/Pulse Opinion Research&quot;, &quot;Morni…
+## $ grade               &lt;chr&gt; &quot;B&quot;, &quot;B&quot;, &quot;B+&quot;, &quot;B&quot;, &quot;B-&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B+&quot;, &quot;B…
+## $ samplesize          &lt;dbl&gt; 1500, 15000, 1516, 1993, 1115, 15000, 15000, 1500,…
+## $ population          &lt;chr&gt; &quot;lv&quot;, &quot;a&quot;, &quot;a&quot;, &quot;rv&quot;, &quot;a&quot;, &quot;a&quot;, &quot;a&quot;, &quot;lv&quot;, &quot;rv&quot;, &quot;…
+## $ weight              &lt;dbl&gt; 0.3382, 0.2594, 1.2454, 0.0930, 1.1014, 0.2333, 0.…
+## $ influence           &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ approve             &lt;dbl&gt; 48, 50, 45, 56, 55, 51, 52, 48, 63, 58, 54, 48, 55…
+## $ disapprove          &lt;dbl&gt; 45, 28, 28, 31, 32, 28, 29, 47, 37, 32, 30, 47, 33…
+## $ adjusted_approve    &lt;dbl&gt; 50.4, 48.5, 46.3, 54.5, 53.8, 49.5, 50.5, 50.4, 58…
+## $ adjusted_disapprove &lt;dbl&gt; 38.7, 31.2, 28.5, 34.2, 33.0, 31.2, 32.2, 40.7, 38…
+## $ multiversions       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ tracking            &lt;lgl&gt; TRUE, TRUE, NA, NA, NA, TRUE, TRUE, TRUE, NA, NA, …
+## $ url                 &lt;chr&gt; &quot;https://www.rasmussenreports.com/public_content/p…
+## $ poll_id             &lt;dbl&gt; 74247, 74272, 74327, 74246, 74248, 74273, 74274, 7…
+## $ question_id         &lt;dbl&gt; 139395, 139491, 139570, 139394, 139404, 139492, 13…
+## $ createddate         &lt;chr&gt; &quot;1/22/2021&quot;, &quot;1/28/2021&quot;, &quot;2/2/2021&quot;, &quot;1/22/2021&quot;,…
+## $ timestamp           &lt;chr&gt; &quot;12:12:10 20 Oct 2021&quot;, &quot;12:12:10 20 Oct 2021&quot;, &quot;1…</code></pre>
+<div id="create-a-plot" class="section level2">
+<h2>Create a plot</h2>
+<p>What I would like you to do is to calculate the average net approval rate (approve- disapprove) for each week since he got into office. I want you plot the net approval, along with its 95% confidence interval. There are various dates given for each poll, please use <code>enddate</code>, i.e., the date the poll ended.</p>
+<p>Also, please add an orange line at zero. Your plot should look like this:</p>
+<p><img src="/Users/dp/Desktop/my_website/images/biden_approval_margin.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>approval_pollmutate&lt;- approval_polllist %&gt;%
+  mutate(net_approval_rate = approval_polllist$approve - approval_polllist$disapprove, enddate = mdy(enddate), week = week(enddate)) %&gt;%
+  group_by(week) %&gt;%
+  summarize(average_net_approval_rate = mean(net_approval_rate,na.rm=TRUE), 
+            sd_net_approval_rate = sd(net_approval_rate,na.rm=TRUE), 
+            count = n(),
+            t_critical= qt(0.975,count-1),
+            se_approval_rate=
+              sd_net_approval_rate/sqrt(count),
+            margin_of_error= t_critical * se_approval_rate,
+            approval_rate_low95=average_net_approval_rate-margin_of_error,
+            approval_rate_high95=average_net_approval_rate+margin_of_error)
+            
+            
+            
+  ggplot(approval_pollmutate,aes(x = week, y = average_net_approval_rate)) + 
+    geom_line(color = &quot;red&quot;) + 
+    labs(title = &quot;Estimate Approval Margin (approve-disapprove) for Joe Biden&quot;,subtitle=&quot;Weekly average of all poll&quot;, x = &quot;Week of the year&quot;, y=&quot;Average Approval Margin (Approve - Disapprove)&quot;)+geom_point(color = &quot;red&quot;) +
+    geom_smooth(color = &quot;blue&quot;, se = FALSE)+ theme_bw() +
+    geom_line(aes(x=week,y= approval_rate_low95),linetype=&quot;solid&quot;,color=&quot;orange&quot;)+
+    geom_line(aes(x=week,y= approval_rate_high95),linetype=&quot;solid&quot;,color=&quot;orange&quot;)+
+    scale_y_continuous(labels = scales::comma) +
+    geom_hline(yintercept=0,linetype=&quot;solid&quot;,color=&quot;orange&quot;, size = 1) + 
+      annotate(&quot;text&quot;, x = 20,y=26, label = &quot;2021&quot;, size=2,color=&quot;black&quot;)+
+    geom_ribbon(aes(xmin = 7, xmax = 40, ymin=approval_rate_low95, ymax =approval_rate_high95), alpha = 0.1)</code></pre>
+<p><img src="/blogs/blog8_files/figure-html/unnamed-chunk-5-1.png" width="648" style="display: block; margin: auto;" /></p>
+<blockquote>
+<p>What we see here is that the polls in favour of Biden have been consistently decreasing since the president was elected. The most recent explanation is the crisis in Afghanistan and how people disapprove the Biden management of the crisis. Another reason is due to the fact that recent inflation over the summer has exerted downward pressure on people’s purchasing power. Related to what we have said about temperatures, we see that there are still wide uncertainties regarding the ability of Biden to get the approval of Congress for its political agenda.</p>
+</blockquote>
+</div>
+<div id="compare-confidence-intervals" class="section level2">
+<h2>Compare Confidence Intervals</h2>
+<p>Compare the confidence intervals for <code>week 3</code> and <code>week 25</code>. Can you explain what’s going on? One paragraph would be enough.</p>
+<blockquote>
+<p>When looking at week 3 and week 25 in the given graph, we see the confidence interval is very big for week 3 and very narrow for week 25. It is mainly due to the fact that the count function (the sample size) is actually very small for week 3 (not enough data available) and should be larger for week 25. In our graph (start from week 7), we saw a similar anomaly for the last data, the confidence interval is very wide. When we looked in more details, we saw that there were only 11 data points available for the week 7. As a result, the smaller the sample size, the larger the standard error, the larger the confidence interval, as a lower sample size is not accurate enough and the data could be more volatile.</p>
+</blockquote>
+</div>
+</div>
+<div id="challenge-1-excess-rentals-in-tfl-bike-sharing" class="section level1">
+<h1>Challenge 1: Excess rentals in TfL bike sharing</h1>
+<p>Recall the TfL data on how many bikes were hired every single day. We can get the latest data by running the following</p>
+<pre class="r"><code>url &lt;- &quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&quot;
+
+# Download TFL data to temporary file
+httr::GET(url, write_disk(bike.temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)))</code></pre>
+<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2021-09-23T12%3A52%3A20/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20211020%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20211020T191213Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=8ce5f3c0e55d8d4963ac4a1cb014adaa72fe98e8298161a3a5f040ee980635eb&amp;X-Amz-SignedHeaders=host]
+##   Date: 2021-10-20 19:15
+##   Status: 200
+##   Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+##   Size: 174 kB
+## &lt;ON DISK&gt;  /var/folders/zk/7c_szw1d445_y07kxm67_g1r0000gn/T//RtmptGCrjv/file23616c6fc81d.xlsx</code></pre>
+<pre class="r"><code># Use read_excel to read it as dataframe
+bike0 &lt;- read_excel(bike.temp,
+                   sheet = &quot;Data&quot;,
+                   range = cell_cols(&quot;A:B&quot;))
+
+# change dates to get year, month, and week
+bike &lt;- bike0 %&gt;% 
+  clean_names() %&gt;% 
+  rename (bikes_hired = number_of_bicycle_hires) %&gt;% 
+  mutate (year = year(day),
+          month = lubridate::month(day, label = TRUE),
+          week = isoweek(day))</code></pre>
+<p>We can easily create a facet grid that plots bikes hired by month and year.</p>
+<p><img src="/Users/dp/Desktop/my_website/images/tfl_distributions_monthly.png" width="100%" style="display: block; margin: auto;" />
+<img src="/blogs/blog8_files/figure-html/tfl_month_year_grid1-1.png" width="100%" style="display: block; margin: auto;" />
+Look at May and Jun and compare 2020 with the previous years. What’s happening?
+&gt; The levels of bike rentals in May and June 2020 were significantly below all the previous years for the corresponding months. The reason for this was the National Lockdowns that were in place to curb the spread of Covid-19. People were encouraged to stay at home and not to travel to socialise or work. This inevitably resulted in a much lower level of travel and hence far fewer bikes were rented. Additionally, it was likely that a heighted public sense of hysteria relating to the coronavirus caused people to be more cautious as to their use of the bikes from a sanitary perspective, as you have no way of telling who used the bike before you. The lockdowns continued throughout the two months which caused the much flatter distribution of the data. This is in stark contrast to years such as 2018 which had exceptionally good weather which caused strong spikes in bike rentals resulting from people choosing the outdoor transport option.</p>
+<p>Normally, in May-June is Summer in UK and people want to rent the bike to ride during the good weather. Due to COVID-19 pandemic and the lock-down of the country, we can see that the number of bike hire in May and June 2020 is lower in the same period of other years. Moreover, the density is more flatten out compared to other years.</p>
+<p>However, the challenge I want you to work on is to reproduce the following two graphs.</p>
+<p><img src="/Users/dp/Desktop/my_website/images/tfl_monthly.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Manipulate the data for graph plotting, calculate average between year 2016-2019 
+bike_expected &lt;- bike %&gt;%
+  filter(year &gt;=2016,year&lt;=2019) %&gt;% #average 2016-2019 
+  group_by(month) %&gt;% 
+  summarize(expected_bikehired = mean(bikes_hired))
+# Calculate actual data frame 
+bike_actual&lt;-bike %&gt;% 
+  filter(year &gt;= 2016) %&gt;% 
+  group_by(year,month) %&gt;% # In this we average each year 
+  summarize(actualbikehire_monthly= mean(bikes_hired)) 
+# Left join the data together 
+bike_graph&lt;- bike_expected %&gt;% 
+  left_join(bike_actual,by=&quot;month&quot;) %&gt;% 
+# Create the column for geom_ribbon to shade the area 
+  mutate(excess_rentals = actualbikehire_monthly - expected_bikehired ,
+  up = ifelse(actualbikehire_monthly&gt;expected_bikehired, excess_rentals, 0),down = ifelse(actualbikehire_monthly&lt;expected_bikehired, excess_rentals, 0)) </code></pre>
+<pre class="r"><code># Graph the variable
+ggplot()+
+  geom_line(data=bike_graph,aes(x=month,y=actualbikehire_monthly,group=year))+
+  geom_line(data=bike_graph,aes(x=month,y=expected_bikehired,group=year),color=&quot;blue&quot;)+
+  geom_ribbon(data=bike_graph,aes(x=month,ymin=expected_bikehired+down,ymax=expected_bikehired,group=year),fill=&quot;#CB454A&quot;,alpha=0.4)+
+  geom_ribbon(data=bike_graph,aes(x=month,ymin=up+expected_bikehired,ymax=expected_bikehired,group=year),fill=&quot;#7DCD85&quot;,alpha=0.4)+
+  facet_wrap(~year)+
+  labs(title= &quot;Distribution of bikes hired per month&quot;,
+       subtitle=&quot;Change from monthly average shown in blue
+and calculated between 2016-2019&quot;,
+       x=&quot;&quot;,
+       y=&quot;Bike Rentals&quot;,
+       caption=&quot;Source:TfL,London Data Store&quot;)+
+  theme_bw()+
+  theme(legend.position = &quot;none&quot;)+
+  theme(strip.background=element_rect(color=&quot;white&quot;, fill=&quot;white&quot;), panel.border=element_blank())+
+  theme(axis.text.x =element_text(size=5))+
+  theme(axis.title=element_text(size=12, face=&quot;bold&quot;))</code></pre>
+<p><img src="/blogs/blog8_files/figure-html/unnamed-chunk-7-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>The second one looks at percentage changes from the expected level of weekly rentals. The two grey shaded rectangles correspond to Q2 (weeks 14-26) and Q4 (weeks 40-52).</p>
+<p><img src="/Users/dp/Desktop/my_website/images/tfl_weekly.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>For both of these graphs, you have to calculate the expected number of rentals per week or month between 2016-2019 and then, see how each week/month of 2020-2021 compares to the expected rentals. Think of the calculation <code>excess_rentals = actual_rentals - expected_rentals</code>.</p>
+<pre class="r"><code>#Calculate the expected dataframe 
+bike_expectedweek &lt;- bike %&gt;%
+  filter(year &gt;=2016,year&lt;=2019) %&gt;% #average 2016-2019 
+  filter(week!=&quot;53&quot;) %&gt;% #filter out week 53 data (no week 53)
+  group_by(week) %&gt;% 
+  summarize(expected_bikehiredweekly = mean(bikes_hired))
+# Calculate actual data frame 
+bike_actualweek&lt;-bike %&gt;% 
+  filter(year &gt;=2016) %&gt;% 
+  filter(week!=&quot;53&quot;) %&gt;% #filter out week 53 data (no week 53)
+  group_by(year,week) %&gt;% # In this we average each year 
+  summarize(actualbikehire_weekly= mean(bikes_hired)) 
+
+# Left join the data together 
+bike_graph2&lt;- bike_expectedweek %&gt;% 
+  left_join(bike_actualweek,by=&quot;week&quot;) %&gt;% 
+# mutate the percentage change data column
+  mutate(percentagechange_weekly= (actualbikehire_weekly- expected_bikehiredweekly)/expected_bikehiredweekly) %&gt;% 
+# Create the column for geom_ribbon to shade the area 
+  mutate(
+  up = ifelse(actualbikehire_weekly&gt;expected_bikehiredweekly, percentagechange_weekly, 0),down = ifelse(actualbikehire_weekly&lt;expected_bikehiredweekly, percentagechange_weekly, 0)) %&gt;% 
+# Create variable to shade the graph for geom_ribbon 
+  mutate(week14=14) %&gt;% 
+  mutate(week26=26) %&gt;% 
+# Create column for color in geom tile 
+  mutate(true_false=ifelse(actualbikehire_weekly&gt;expected_bikehiredweekly, &quot;Yes&quot;, &quot;No&quot;)) %&gt;% 
+  mutate()</code></pre>
+<pre class="r"><code>#Graph the dataframe 
+ggplot(bike_graph2) + 
+  geom_rect(aes(x=week,xmin=week14,xmax=week26,ymin = -1,ymax = 1,group=year), fill = &quot;grey69&quot;, alpha = 0.01)+
+  geom_rect(aes(x=week,xmin=40,xmax=52,ymin = -1,ymax = 1,group=year), fill = &quot;grey69&quot;, alpha = 0.01)+
+  geom_line(aes(x=week,y=percentagechange_weekly))+
+  geom_point(aes(x=week,y=percentagechange_weekly), color = &quot;transparent&quot;)+
+  geom_rug(aes(x=week,color = true_false))+
+  scale_color_manual(values = c(&quot;No&quot; = &quot;#CB454A&quot;,&quot;Yes&quot; = &quot;#7DCD85&quot;))+
+  facet_wrap(~year)+
+  geom_ribbon(aes(x=week,ymin=down,ymax=0,group=year),fill=&quot;#CB454A&quot;,alpha=0.4)+
+  geom_ribbon(aes(x=week,ymin=0,ymax=up,group=year),fill=&quot;#7DCD85&quot;,alpha=0.4) +
+  labs(title= &quot;Weekly changes in TfL bike rentals&quot;,
+       subtitle=&quot;% change from weekly average 
+calculated between 2016-2019&quot;,
+       x=&quot;week&quot;,
+       y=&quot;&quot;,
+       caption=&quot;Source:TfL,London Data Store&quot;)+
+  scale_y_continuous(labels=scales::percent_format(accuracy=1))+
+  theme_bw()+
+  theme(legend.position = &quot;none&quot;)+
+  theme(strip.background=element_rect(color=&quot;white&quot;, fill=&quot;white&quot;), panel.border=element_blank())+
+  theme(axis.text.x =element_text(size=5))+
+  theme(axis.title=element_text(size=12, face=&quot;bold&quot;))</code></pre>
+<p><img src="/blogs/blog8_files/figure-html/unnamed-chunk-9-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Should you use the mean or the median to calculate your expected rentals? Why?</p>
+<blockquote>
+<p>We believe that the median is the most effective way to calculate expected rentals. The reason for this is that it removes the effect of adverse outside factors on bike rental. Some examples of events like this are; tube strikes, national lockdowns, and sustained periods of exceptionally cold weather. Each of these events can extend as long as a week or longer which can skew the mean data. This would cause the mean to produce an inaccurate prediction of future events. As these events could not be predicted in the past and hence, we will not accurately be able to predict them in the future, we feel it is most prudent to remove them entirely from our expected rentals.</p>
+</blockquote>
+<p>In creating your plots, you may find these links useful:</p>
+<ul>
+<li><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="uri">https://ggplot2.tidyverse.org/reference/geom_ribbon.html</a></li>
+<li><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="uri">https://ggplot2.tidyverse.org/reference/geom_tile.html</a></li>
+<li><a href="https://ggplot2.tidyverse.org/reference/geom_rug.html" class="uri">https://ggplot2.tidyverse.org/reference/geom_rug.html</a></li>
+</ul>
+</div>
+<div id="challenge-2-how-has-the-cpi-and-its-components-changed-over-the-last-few-years" class="section level1">
+<h1>Challenge 2: How has the CPI and its components changed over the last few years?</h1>
+<p>Remember how we used the tidyqant package to download CPI data. In this exercise, I would like you to do the following:</p>
+<ol style="list-style-type: decimal">
+<li>You can find <a href="https://fredaccount.stlouisfed.org/public/datalist/843">CPI components at FRED</a>. You should adapt the code from German polls to scrape the FRED website and pull all of the CPI components into a vector. FIY, the list of components is the second table in that webpage.</li>
+<li>Once you have a vector of components, you can then pass it to <code>tidyquant::tq_get(get = "economic.data", from =  "2000-01-01")</code> to get all data since January 1, 2000</li>
+<li>Since the data you download is an index with various starting dates, you need to calculate the yearly, or 12-month change. To do this you need to use the <code>lag</code> function, and specifically, <code>year_change = value/lag(value, 12) - 1</code>; this means you are comparing the current month’s value with that 12 months ago lag(value, 12).</li>
+<li>I want you to order components so the higher the yearly change, the earlier does that component appear.</li>
+<li>You should also make sure that the <strong>All Items</strong> CPI (CPIAUCSL) appears first.</li>
+<li>Add a <code>geom_smooth()</code> for each component to get a sense of the overall trend.
+1 You may want to colour the points according to whether yearly change was positive or negative.</li>
+</ol>
+<p>Having done this, you should get this graph.</p>
+<p><img src="/Users/dp/Desktop/my_website/images/cpi_components_since_2016.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>library(rvest)
+url &lt;- &quot;https://fredaccount.stlouisfed.org/public/datalist/843&quot;
+
+tables &lt;- url %&gt;% 
+  read_html() %&gt;% 
+  html_nodes(css=&quot;table&quot;)
+
+CPI_index &lt;- map(tables, . %&gt;% 
+             html_table(fill=TRUE)%&gt;% 
+             janitor::clean_names())</code></pre>
+<pre class="r"><code>CPI_index &lt;- CPI_index[[2]]
+symbols &lt;- CPI_index[,2]
+
+CPI_data &lt;- symbols %&gt;% 
+  tidyquant::tq_get(get = &quot;economic.data&quot;, from =  &quot;2000-01-01&quot;)
+
+CPI &lt;- merge(x = CPI_index, y = CPI_data, by = &quot;series_id&quot;)</code></pre>
+<pre class="r"><code># unique(CPI$title)
+
+CPI_change &lt;- CPI %&gt;% 
+  mutate(year_change = price/lag(price, 12) - 1,
+         is_CPIAUCSL = series_id == &quot;CPIAUCSL&quot;,
+         short_title = gsub(&quot; in U.S. City Average&quot;, &quot;&quot;, gsub(&quot;Consumer Price Index for All Urban Consumers: &quot;, &quot;&quot;, title)),
+         is_negative = year_change &lt; 0) %&gt;%
+  arrange(desc(is_CPIAUCSL), desc(year_change))</code></pre>
+<pre class="r"><code># Create the new column to sort the data in the facet wrap
+CPI_change$short_title&lt;-factor(CPI_change$short_title, levels=c(&quot;All Items&quot;,&quot;Gasoline (All Types)&quot;,&quot;Motor Fuel&quot;,&quot;Used Cars and Trucks&quot;,&quot;Fuel Oil and Other Fuels&quot;, &quot;Airline Fares&quot;, &quot;Private Transportation&quot;, &quot;Lodging Away from Home&quot;,&quot;Transportation&quot;,&quot;Utility (Piped) Gas Service&quot;, &quot;New and Used Motor Vehicles&quot;,&quot;Public Transportation&quot;, &quot;Meats, Poultry, Fish, and Eggs&quot;,&quot;Household Energy&quot;,&quot;Infants&#39; and Toddlers&#39; Apparel&quot;,&quot;Energy Services&quot;,&quot;Fuels and Utilities&quot;, &quot;New Vehicles&quot;,&quot;Footwear&quot;,&quot;Motor Vehicle Parts and Equipment&quot;,&quot;Dairy and Related Products&quot;,&quot;Apparel&quot;,&quot;Food at Home&quot;,&quot;Fats and Oils&quot;,&quot;Women&#39;s and Girls&#39; Apparel&quot;,&quot;Electricity&quot;,&quot;Nonalcoholic Beverages and Beverage Materials&quot;,&quot;Sugar and Sweets&quot;,&quot;Other Food Away from Home&quot;, &quot;Food Away from Home&quot;,&quot;Other Foods&quot;,&quot;Household Furnishings and Operations&quot;,&quot;Food&quot;, &quot;Water and Sewer and Trash Collection Services&quot;,&quot;Food and Beverages&quot;, &quot;Motor Vehicle Maintenance and Repair&quot;,&quot;Men&#39;s and Boys&#39; Apparel&quot;,&quot;Other Food at Home&quot;, &quot;Rent of Primary Residence&quot;,&quot;Fruits and Vegetables&quot;, &quot;Shelter&quot;,&quot;Owners&#39; Equivalent Rent of Primary Residence&quot;,&quot;Owners&#39; Equivalent Rent of Residences&quot;,&quot;Housing&quot;,&quot;Alcoholic Beverages Away from Home&quot;,&quot;Cereals and Bakery Products&quot;,&quot;Alcoholic Beverages&quot;,&quot;Alcoholic Beverages at Home&quot;, &quot;Coffee&quot;))</code></pre>
+<pre class="r"><code>ggplot(data = CPI_change) +
+  geom_point(aes(x = date, y = year_change, color = is_negative), size = 0.3) +
+  geom_smooth(aes(x = date, y = year_change), color = &quot;grey&quot;, size = 0.5, se = FALSE)+
+  facet_wrap(~short_title,scales=&quot;free&quot;)+
+  scale_y_continuous(labels=scales::percent_format(accuracy=1))+
+  labs(title = &quot;Yearly change of US CPI (All Items) and its components&quot;,
+       subtitle = &quot;YoY change being positive or negative
+Jan 2016 to Aug 2021&quot;,
+       xlab = &quot;&quot;,
+       ylab = &quot;YoY % Change&quot;,
+       caption=&quot;Data from St. Louis Fed FRED 
+       https://fredaccount.stlouisfed.org/public/datalist/843&quot;)+
+  theme(legend.position = &quot;none&quot;,
+        plot.margin = unit(rep(1,20), &quot;lines&quot;))+
+    theme( axis.text = element_text( size = 5 ),
+           axis.text.x = element_text( size = 3 ),
+           axis.title = element_text( size = 4, face = &quot;bold&quot; ),strip.text = element_text(size = 5))</code></pre>
+<p><img src="/blogs/blog8_files/figure-html/graphing-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggsave(file=&quot;bench_query_sort.pdf&quot;, width=10, height=15, dpi=500)</code></pre>
+<p>This graphs is fine, but perhaps has too many sub-categories. You can find the <a href="https://www.bls.gov/cpi/tables/relative-importance/2020.htm">relative importance of components in the Consumer Price Indexes: U.S. city average, December 2020</a> here. Can you choose a smaller subset of the components you have and only list the major categories (Housing, Transportation, Food and beverages, Medical care, Education and communication, Recreation, and Apparel), sorted according to their relative importance?</p>
+<pre class="r"><code>url &lt;- &quot;https://www.bls.gov/cpi/tables/relative-importance/2020.htm&quot;
+
+tables &lt;- url %&gt;% 
+  read_html() %&gt;% 
+  html_nodes(css=&quot;table&quot;)
+
+categories &lt;- map(tables, . %&gt;% 
+             html_table(fill=TRUE)%&gt;% 
+             janitor::clean_names())
+
+categories &lt;- categories[[1]]</code></pre>
+<pre class="r"><code>CPI_major &lt;- CPI_change %&gt;% 
+  filter(short_title %in% c(&quot;Food and Beverages&quot;, &quot;Housing&quot;, &quot;Apparel&quot;, &quot;Transportation&quot;, &quot;Education and communication&quot;, &quot;Recreation&quot;, &quot;Medical care&quot;)) %&gt;% 
+  merge(.,categories, by.x = &quot;short_title&quot;, by.y = &quot;item_and_group&quot;) %&gt;% 
+  arrange(desc(u_s_city_average))</code></pre>
+<pre class="r"><code>ggplot(data = CPI_major) +
+  geom_point(aes(x = date, y = year_change, color = is_negative), size = 0.3) +
+  geom_smooth(aes(x = date, y = year_change), color = &quot;grey&quot;, size = 0.5, se = FALSE)+
+  facet_wrap(~short_title)+
+  labs(title = &quot;Yearly change of US CPI (major categories) and its components&quot;,
+       subtitle = &quot;YoY change being positive or negative&quot;,
+       xlab = &quot;&quot;,
+       ylab = &quot;YoY % Change&quot;)+
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="/blogs/blog8_files/figure-html/graphing1-1.png" width="648" style="display: block; margin: auto;" />
+&gt; Team Comment - We see a sharp increase in the CPI over the last 12-18 months which is a result of sharp increase in prices of almost all everyday goods. There are a variety of touted reasons for this increase in inflation. The two most prominent are; supply chain shortages due to COVID-19 and excessive stimulus to the economy as a result of quantative easing. Historically low interest rates and and readily available money has led to the same people, competing for the same resources however now with significantly more cash in hand. This has inevitably driven up prices rapidly. The sharp increases have been almost entirely across the board however the one exception to this trend appears to have come in the housing and rental sector. This is as a result of many people moving out of cities during the pandemic and reevaluating their priorities as to the true value of paying exceptionally high rents to live in cities. In essences, the demand has been lowered which has offset the excess supply of cash. Shortages of fuel and car part materials on the other hand have driven the cost transportation way up. This is more related to the supply chain issues that have arisen with Covid however, it has been equally as devastating for the average consumers buying power in that market.</p>
+</div>
