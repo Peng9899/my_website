@@ -7,7 +7,7 @@ output:
     df_print: paged
 image: pic07.JPG
 keywords: ''
-slug: blog5
+slug: blog6
 categories:
 - ''
 - ''
