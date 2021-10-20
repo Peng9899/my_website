@@ -81,8 +81,8 @@ params:
         url: blogs/ipsum
       - image: pic05.jpg
         subtitle: Happy to share with you
-        title: Our Campus
-        url: blogs/ipsum
+        title: Our LBS and MFA
+        url: https://www.london.edu/masters-degrees/masters-in-financial-analysis
       - image: pic06.JPG
         subtitle: FEEL FREE TO CONTACT ME
         title: My Linkedin
