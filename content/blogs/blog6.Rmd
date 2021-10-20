@@ -6,7 +6,7 @@ output:
   html_document:
   df_print: paged
 keywords: ''
-slug: blog6
+slug:blog6
 categories:
   - ''
 - ''
@@ -252,80 +252,3 @@ animal_rescue %>%
 
 ```
 
-Do you see anything strange in these tables? 
-
-Finally, let us have a loot at the notional cost for rescuing each of these animals. As the LFB says,
-
-> Please note that any cost included is a notional cost calculated based on the length of time rounded up to the nearest hour spent by Pump, Aerial and FRU appliances at the incident and charged at the current Brigade hourly rate.
-
-There is two things we will do:
-
-1. Calculate the mean and median `incident_notional_cost` for each `animal_group_parent`
-2. Plot a boxplot to get a feel for the distribution of `incident_notional_cost` by `animal_group_parent`.
-
-
-Before we go on, however, we need to fix `incident_notional_cost` as it is stored as a `chr`, or character, rather than a number.
-
-```{r, parse_incident_cost,message=FALSE, warning=FALSE}
-
-typeof(animal_rescue$incident_notional_cost)
-animal_rescue <- animal_rescue %>% 
-  mutate(incident_notional_cost = parse_number(incident_notional_cost))
-typeof(animal_rescue$incident_notional_cost)
-
-```
-
-
-Now tht incident_notional_cost is numeric, let us quickly calculate summary statistics for each animal group. 
-
-
-```{r, stats_on_incident_cost,message=FALSE, warning=FALSE}
-
-animal_rescue %>% 
-  group_by(animal_group_parent) %>% 
-  filter(n()>6) %>% 
-  summarise(mean_incident_cost = mean (incident_notional_cost, na.rm=TRUE),
-            median_incident_cost = median (incident_notional_cost, na.rm=TRUE),
-            sd_incident_cost = sd (incident_notional_cost, na.rm=TRUE),
-            min_incident_cost = min (incident_notional_cost, na.rm=TRUE),
-            max_incident_cost = max (incident_notional_cost, na.rm=TRUE),
-            count = n()) %>% 
-  arrange(desc(mean_incident_cost))
-
-```
-
-
-Compare the mean and the median for each animal group. waht do you think this is telling us?
-Anything else that stands out? Any outliers?
-
-Finally, let us plot a few plots that show the distribution of incident_cost for each animal group.
-
-```{r, plots_on_incident_cost_by_animal_group,message=FALSE, warning=FALSE}
-
-# base_plot
-base_plot <- animal_rescue %>% 
-  group_by(animal_group_parent) %>% 
-  filter(n()>6) %>% 
-  ggplot(aes(x=incident_notional_cost))+
-  facet_wrap(~animal_group_parent, scales = "free")+
-  theme_bw()
-
-base_plot + geom_histogram()
-base_plot + geom_density()
-base_plot + geom_boxplot()
-base_plot + stat_ecdf(geom = "step", pad = FALSE) +
-  scale_y_continuous(labels = scales::percent)
-
-
-
-```
-
-Which of these four graphs do you think best communicates the variability of the `incident_notional_cost` values? Also, can you please tell some sort of story (which animals are more expensive to rescue than others, the spread of values) and speculate about the differences in the patterns.
-
-From my viewpoint, compared with other graphs, the density graphy may be more accurate to illustrate the magnitude and the variability of the incident notional cost. And it will also show the central data from the grahh.
-
-From the graph, I could conclude that the some species such as rabbit and ferret may have higher cost variance possibly due to the varied habitats. In addition, some species may have neeed higher cost (**higher magnitude on the graph**)probably becausee of the difficulty to rescue them. 
-
-# Submit the assignment
-
-Knit the completed R Markdown file as an HTML document (use the "Knit" button at the top of the script editor window) and upload it to Canvas.
