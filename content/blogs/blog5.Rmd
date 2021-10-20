@@ -8,7 +8,7 @@ description: Nullam et orci eu lorem consequat tincidunt vivamus et sagittis mag
 output:
   html_document:
     df_print: paged
-image: pic07.jpg
+image: pic07.JPG
 keywords: ''
 slug: blog5
 categories:
@@ -17,7 +17,7 @@ categories:
 draft: no
 ---
 
-Hello My Friend, I am Peng CHEN and you can call me Peng or DP I graduated from Finance, Accounting, and Management from the *University of Nottingham* and I am now one of the students in **MFA 2022 programme** . It is really a great honour to contribute to *MFA programme* and the whole *London Business School* community.
+Hello My Friend, I am Peng CHEN and you can call me Peng or DP. I graduated from Finance, Accounting, and Management from the *University of Nottingham* and I am now one of the students in **MFA 2022 programme** in **London Business School** . It is really a great honour to contribute to *MFA programme* and the whole *London Business School* community.
 
 I am a typical **Finance** person due to my continuous interest in Finance and refelcted from my previous internship **e.g.**:
 
