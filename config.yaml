@@ -66,7 +66,7 @@ params:
       - image: pic01.jpg
         subtitle: SOMETHING ABOUT ME
         title: My Story
-        url: blogs/blog4
+        url: blogs/blog5
       - image: pic02.JPG
         subtitle: My Resume
         title: Academic and Professional
