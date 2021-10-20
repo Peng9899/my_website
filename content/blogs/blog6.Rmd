@@ -1,17 +1,16 @@
 ---
-title: "SELF INTRODUCTION"
+title: 'MFA 20222 Pre-programme Assignment'
 date: '2017-10-31T22:42:51-05:00'
-
 output:
-  html_document:
-    df_print: paged
+  df_print: paged
 image: pic07.JPG
 keywords: ''
 slug: blog6
 categories:
-- ''
+  - ''
 - ''
 draft: no
+
 ---
 
 ```{r load-libraries, warning=FALSE, message=FALSE, echo=FALSE}
