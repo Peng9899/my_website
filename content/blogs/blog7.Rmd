@@ -1,5 +1,5 @@
 ---
-title: "SELF INTRODUCTION"
+title: "Pre-course Assignment"
 date: '2017-10-31T22:42:51-05:00'
 
 output:
@@ -21,31 +21,6 @@ library(gapminder)
 library(here)
 library(janitor)
 ```
-
-## Practice using Markdown
-
-Written assignments will be submitted using [Markdown](https://daringfireball.net/projects/markdown/). Markdown is a lightweight text formatting language that easily converts between file formats. It is integrated directly into [R Markdown](http://rmarkdown.rstudio.com/), which combines R code, output, and written text into a single document (`.Rmd`).
-
-There is a very nice [Markdwown tutorial](https://commonmark.org/help/tutorial/) that I suggest you go through before working on your assignment. If you want to use a stand-alone Markdown editor [Typora](https://typora.io/) is a lightweight Markdown editor that inherently supports pandoc-flavored Markdown.
-
-## Pandoc
-
-[Pandoc](http://pandoc.org)is a program that converts Markdown files into basically anything else. It was created by [John MacFarlane](https://johnmacfarlane.net), a philosophy professor at the University of California, Berkeley and is widely used as a writing tool and as a basis for publishing workflow. Kieran Healy's [Plain Text Social Science workflow](http://plain-text.co) describes how to use Markdown and then convert your Markdown document to HTML, PDF, word, etc.
-
-You should create a file whose name will be `your_name.Rmd`, so if I were submitting, my file would be called `Kostis_Christodoulou.Rmd`
-
-# Task 1: Short biography written using markdown
-
-#Heading 1
-Hello, I am Peng CHEN [linkedin] (https://www.linkedin.com/in/peng-chen-b83187162/)and graduated from Finance, Accounting, and Management from the *University of Nottingham*. It is my best honor to take part in our **MFA 2022 programme** and can contribute to our programme and the whole *London Business School* community.
-
-##Heading 2
-I am a typical **Finance** person due to my continuous interest in Finance and refelcted from my previous internship **e.g.**:
-
-* **Investment Analyst** in *CITIC PE*, *top 3 PE in CHINA*, and responsible for assisting the M&A event of the private hospitals. 
-* **Analyst** in *CMS*，*top 5 IBD in CHINA*, and responsible for the dual dilligence for the IPO project.
-* **Analyst** in *Yinhua Fund*, *top 5 Fund in CHINA*, and responsible for the TMT analysis, 
-
 
 
 # Task 2: `gapminder` country comparison
@@ -192,7 +167,7 @@ What can you say about the relationship shown above? Again, don't just say what'
 
 #Finding
 It can be illustrated from the different graphs and data that there is high correlation between the proportion of native born residents and the preference rate for the Brexit. It can be explained that the native-born residents will stimulate the Brexit progress probably because of the internal competitive working environment and less working opportunities. Therefore, the fear mind of lossing the job causes them to opposite the immigration of European people under the EU UNION circumstance and to support the independent working situation.
-> Type your answer after, and outside, this blockquote.
+
 
 # Task 4: Animal rescue incidents attended by the London Fire Brigade
 
