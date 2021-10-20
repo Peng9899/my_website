@@ -87,8 +87,4 @@ params:
         subtitle: FEEL FREE TO CONTACT ME
         title: My Linkedin
         url: https://www.linkedin.com/in/peng-chen-b83187162/
-  two:
-    buttonText: Get Started
-    enable: yes
 
-    url: blogs
