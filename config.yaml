@@ -70,7 +70,7 @@ params:
       - image: pic02.JPG
         subtitle: My Resume
         title: Academic and Professional
-        url: blogs/Peng Chen_CV
+        url: blogs/Peng_Chen_CV
       - image: pic03.JPG
         subtitle: INSIGHT FROM GROUP ASSIGNMENT
         title: Data Analytics in Finance Experience
