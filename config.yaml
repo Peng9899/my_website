@@ -77,8 +77,8 @@ params:
         url: blogs/magna
       - image: pic04.JPG
         subtitle: INSIGHT FROM MY WORK
-        title: First meet with Data~
-        url: blogs/blog6
+        title: First meet with Data
+        url: blogs/blog6.rmd
       - image: pic05.jpg
         subtitle: Happy to share with you
         title: Our LBS and MFA
